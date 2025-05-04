@@ -5,7 +5,7 @@ import java.sql.SQLException;
 import com.example.DBService.DBService;
 
 
-public class AccountService {
+public class AccountService implements AutoCloseable {
     private final DBService dbService;
     public static final String ACCOUNT_SERVICE_ATTRIBUTE = "accountService";
 
@@ -91,6 +91,13 @@ public class AccountService {
         if (!file.exists()) {
             file.createNewFile();
             java.nio.file.Files.write(file.toPath(), content.getBytes());
+        }
+    }
+
+    @Override
+    public void close() throws SQLException {
+        if (dbService != null) {
+            dbService.close();
         }
     }
 }
